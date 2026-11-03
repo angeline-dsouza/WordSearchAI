@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Word Search AI Solver</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Word Search AI Solver</h1>
+    <p>Depth First Search with a Trie</p>
+  </header>
+  <main>
+    <section class="card">
+      <div id="grid"></div>
+      <div class="legend">
+        <span class="lg explored"></span><span style="margin-left:10px">Explored</span>
+        <span class="lg path"></span><span style="margin-left:10px">Current path</span>
+        <span class="lg active"></span><span style="margin-left:10px">Active cell</span>
+        <span class="lg found"></span><span style="margin-left:10px">Found word</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Words to find</h2>
+      <textarea id="wordsInput" rows="3" aria-label="Words">PYTHON, TRIE, GRID, SEARCH, ROBOT, LOGIC</textarea>
+      <div id="message"></div>
+      <ul id="wordList"></ul>
+      <div class="controls">
+        <button id="newBtn">Generate New Grid</button>
+        <button id="solveBtn">Solve Puzzle</button>
+        <button id="pauseBtn">Pause</button>
+        <button id="resetBtn">Reset</button>
+      </div>
+      <div class="controls">
+        <label for="speed">Speed</label>
+        <input type="range" id="speed" min="1" max="10" value="7">
+      </div>
+    </section>
+
+    <section class="card wide">
+      <h2>Search statistics</h2>
+      <div class="stats">
+        <div class="stat"><b id="sTotal">-</b>Total words</div>
+        <div class="stat"><b id="sFound">-</b>Found</div>
+        <div class="stat"><b id="sMissing">-</b>Not found</div>
+        <div class="stat"><b id="sExplored">-</b>Cells explored</div>
+        <div class="stat"><b id="sTime">-</b>Execution time</div>
+      </div>
+    </section>
+
+    <section class="card wide">
+      <h2>Algorithm comparison (same grid, same words)</h2>
+      <table>
+        <thead><tr><th>Algorithm</th><th>Avg time (100 runs)</th><th>Cells explored</th><th>Words found</th></tr></thead>
+        <tbody id="compareBody"></tbody>
+      </table>
+    </section>
+
+    <section class="card wide">
+      <h2>How it works</h2>
+      <details><summary>What is a word search puzzle?</summary><p>A grid of letters with hidden words. Words run in a straight line in any of 8 directions: horizontal, vertical or diagonal, forwards or backwards.</p></details>
+      <details><summary>What is Depth First Search (DFS)?</summary><p>DFS follows one path as deep as it can. When the path fails, it goes back (backtracks) and tries another one.</p></details>
+      <details><summary>What is a Trie?</summary><p>A tree that stores words letter by letter. Words with the same beginning share the same branch, so we can quickly ask: "does any word start with these letters?"</p></details>
+      <details><summary>How does DFS work on the grid?</summary><p>From every cell, DFS tries each of the 8 directions and moves one cell at a time. A cell already on the current path is never reused. When the path cannot continue, DFS backtracks.</p></details>
+      <details><summary>How does the Trie improve the search?</summary><p>While DFS walks through the grid, we walk down the Trie at the same time. If the Trie has no branch for the next letter, no word can be formed, so DFS stops that path immediately (pruning). One search also finds all words together, instead of one search per word.</p></details>
+      <details><summary>Why is this an AI search problem?</summary><p>The AI must explore a space of possible states (cell + direction + letters so far) to reach a goal (a complete word). DFS is an uninformed search, and the Trie acts like a simple heuristic that cuts useless branches.</p></details>
+      <details><summary>Time and space complexity</summary><p>Grid is N x N, longest word has L letters, W words. DFS without Trie: about O(W x N x N x 8 x L) time. DFS with Trie: about O(N x N x 8 x L), which does not grow with W. Space: the Trie needs O(total letters), and DFS needs O(L) for recursion.</p></details>
+      <details><summary>Limitations</summary><p>Only straight-line words are searched. Only A-Z letters and a fixed 10x10 grid. Words are hidden in the grid when it is generated, so words added later may not exist. Building the Trie is not included in the timing. Times are very small because the grid is small.</p></details>
+    </section>
+  </main>
+  <script src="algorithms/trie.js"></script>
+  <script src="algorithms/dfs.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
